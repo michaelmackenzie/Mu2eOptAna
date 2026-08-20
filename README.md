@@ -11,3 +11,8 @@ git clone https://github.com/Mu2e/Mu2eBO.git --branch ExtractAna
 # on build02
 muse build --mu2eCompactPrint --mu2ePyWrap --mu2eCBD -j4 
 ```
+
+Make a tarball:
+```bash
+muse tarball
+```
