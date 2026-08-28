@@ -64,7 +64,8 @@ cat > "$MODE_SPEC_DIR/edep_test.json" <<EOF
         "output_glob": "sim.*.TargetStops.*.art",
         "entry": "stage_entries/mubeam.json",
         "njobs": 1,
-        "events_per_job": 10
+        "events_per_job": 10,
+        "events": 10
       }
     }
   },
@@ -145,6 +146,10 @@ echo "  source activate.sh"
 echo "  export AUTORESEARCH_DATA_ROOT=/exp/mu2e/data/users/mmackenz/localtest"
 echo "  export AUTORESEARCH_BACKING=/exp/mu2e/data/users/mmackenz/localtest"
 echo "  python3 -m graph.run --mode edep_test --config-name $CONFIG"
+echo ""
+echo "Note: The test uses Mu2eBO's mubeam stage and Mu2eOptAna for harvest."
+echo "      The tarball (${REPO_ROOT}/Code.tar.bz2) must include Mu2eOptAna."
+echo "      If building locally: cd $REPO_ROOT && muse tarball"
 echo ""
 echo "This will:"
 echo "  1. Submit 1 mubeam job (10 events)"
