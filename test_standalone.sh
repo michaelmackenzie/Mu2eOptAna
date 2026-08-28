@@ -7,6 +7,11 @@
 #
 # Usage: ./test_standalone.sh [config-name]
 # Example: ./test_standalone.sh test01
+# 
+# By default, uses the local mu2eopt area:
+#   - Codebase: /exp/mu2e/app/users/mmackenz/mu2eopt/Mu2eBO
+#   - Mu2eOptAna: /exp/mu2e/app/users/mmackenz/mu2eopt/Mu2eOptAna
+#   - Backing: /exp/mu2e/data/users/mmackenz/localtest
 
 set -euo pipefail
 
@@ -18,6 +23,10 @@ echo "=== Mu2eOptAna standalone test ==="
 echo "  Config: $CONFIG"
 echo "  REPO_ROOT: $REPO_ROOT"
 echo "  OPTANA_ROOT: $OPTANA_ROOT"
+echo "  Backing (default): /exp/mu2e/data/users/mmackenz/localtest"
+echo ""
+echo "To use a different setup, set environment variables:"
+echo "  REPO_ROOT=/path/to/Mu2eBO OPTANA_ROOT=/path/to/Mu2eOptAna $0"
 
 # Verify required paths
 [ -f "$OPTANA_ROOT/fcl/edep.fcl" ] || { echo "ERROR: EdepAna FCL not found"; exit 1; }
@@ -25,7 +34,14 @@ echo "  OPTANA_ROOT: $OPTANA_ROOT"
 
 # Create temporary mode spec
 WORK_DIR=$(mktemp -d)
-trap "rm -rf $WORK_DIR" EXIT
+trap "rm -rf \$WORK_DIR" EXIT
+
+# Set default ARTIFACT_ROOT to local area
+export AUTORESEARCH_ARTIFACT_ROOT="${AUTORESEARCH_ARTIFACT_ROOT:-/exp/mu2e/data/users/mmackenz/localtest}"
+export AUTORESEARCH_DATA_ROOT="${AUTORESEARCH_DATA_ROOT:-/exp/mu2e/data/users/mmackenz/localtest}"
+
+echo "  ARTIFACT_ROOT (default): \$AUTORESEARCH_ARTIFACT_ROOT (or $AUTORESEARCH_ARTIFACT_ROOT)"
+echo "  DATA_ROOT (default): \$AUTORESEARCH_DATA_ROOT (or $AUTORESEARCH_DATA_ROOT)"
 
 MODE_SPEC_DIR="$WORK_DIR/mode_specs"
 STAGE_ENTRIES_DIR="$WORK_DIR/stage_entries"
@@ -126,8 +142,8 @@ echo "To run this test with Mu2eBO tools:"
 echo ""
 echo "  cd $REPO_ROOT"
 echo "  source activate.sh"
-echo "  export AUTORESEARCH_DATA_ROOT=/tmp/edep_test_$$"
-echo "  export AUTORESEARCH_BACKING=/exp/mu2e/app/users/oksuzian"
+echo "  export AUTORESEARCH_DATA_ROOT=/exp/mu2e/data/users/mmackenz/localtest"
+echo "  export AUTORESEARCH_BACKING=/exp/mu2e/data/users/mmackenz/localtest"
 echo "  python3 -m graph.run --mode edep_test --config-name $CONFIG"
 echo ""
 echo "This will:"
@@ -139,7 +155,7 @@ echo ""
 echo "Or run manually with:"
 echo "  cd \$REPO_ROOT"
 echo "  source activate.sh"
-echo "  export AUTORESEARCH_DATA_ROOT=/tmp/edep_test_$$"
+echo "  export AUTORESEARCH_DATA_ROOT=/exp/mu2e/data/users/mmackenz/localtest"
 echo "  export AUTORESEARCH_MODE=edep_test"
 echo "  python3 core/launch_checks.py --mode edep_test --config $CONFIG"
 echo "  python3 core/pipeline.py --config $CONFIG submit mubeam"
