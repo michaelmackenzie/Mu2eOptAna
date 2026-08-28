@@ -4,6 +4,9 @@ Code to evaluate optimization metrics for the Mu2eBO Bayesian optimization loop.
 Contains the `EdepAna` analyzer module and analysis macros used by `Mu2eBO`
 to compute the primary figure of merit (`s_over_sqrt_b`) and diagnostics.
 
+See the [mu2eopt](https://github.com/Mu2e/Mu2eBO/tree/extract-ana-generalize)
+branch of Mu2eBO for integration instructions.
+
 ## Building
 ```bash
 mu2einit
@@ -19,16 +22,42 @@ Make a tarball:
 muse tarball
 ```
 
-## Running a Single-Job Test
+## Running Tests
 
-Run the test script to verify `EdepAna` can execute:
+### Standalone workflow test
+
+Run the standalone test script to execute a complete Mu2eBO-style workflow:
 
 ```bash
-# Set REPO_ROOT to your Mu2eBO checkout
-export REPO_ROOT=/path/to/Mu2eBO
+cd Mu2eOptAna
+./test_standalone.sh [config-name]
+```
+
+This script:
+1. Creates a minimal mode spec with a custom workflow
+2. Configures the `mubeam` stage to output TargetStops art files
+3. Sets up `harvest` to run `EdepAna` and count muon stops
+4. Runs the full Mu2eBO pipeline (`graph.run`)
+
+The test exercises:
+- `mubeam` stage: runs MuBeamResampler, produces TargetStops art files
+- `harvest`: runs `EdepAna` on TargetStops, counts muon stops
+- Metrics computed: `s_over_sqrt_b`, `calo_per_pot`
+
+### Simple EdepAna verification
+
+For a quick EdepAna library check without full pipeline execution:
+
+```bash
 cd Mu2eOptAna
 ./test_single_job.sh
 ```
+
+This verifies:
+- Mu2e environment setup
+- EdepAna library path resolution
+- File path validation
+
 
 This test:
 1. Sets up the Mu2e environment (SimJob Run1Baq)

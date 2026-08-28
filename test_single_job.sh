@@ -75,14 +75,6 @@ muse setup "$MUSE_SOFTWARE" -q "$MUSE_RELEASE"
 
 # Find the EdepAna library
 MUSE_WORKAREA="${MUSE_WORKAREA:-$(muse info -q workarea)}"
-EDEP_LIB="$MUSE_WORKAREA/build/al9-prof-e29-p094/Mu2eOptAna/lib/libMu2eOptAna_EdepAna_module.so"
-
-if [ -f "$EDEP_LIB" ]; then
-    echo "Found EdepAna library: $EDEP_LIB"
-else
-    echo "WARNING: EdepAna library not found at: $EDEP_LIB"
-    echo "  You may need to build Mu2eOptAna: muse build Mu2eOptAna"
-fi
 
 # Step 3: Run EdepAna test
 echo ""
